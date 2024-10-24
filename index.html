@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Transcription App</title>
+</head>
+<body>
+    <h1>Upload Audio File for Transcription</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="audioFile" accept=".wav, .mp3" required>
+        <button type="submit">Upload & Transcribe</button>
+    </form>
+
+    <p id="result"></p>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const file = document.getElementById('audioFile').files[0];
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await fetch('https://your-worker-url.workers.dev/upload', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.json();
+            document.getElementById('result').innerText = result.transcription;
+        });
+    </script>
+</body>
+</html>
